@@ -17,6 +17,7 @@
     @keyframes bubble-pop { 0%{transform:translate(-50%,-50%) scale(0.5);opacity:0} 60%{transform:translate(-50%,-50%) scale(1.1)} 100%{transform:translate(-50%,-50%) scale(1);opacity:1} }
     @keyframes bubble-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.5)} 50%{box-shadow:0 0 0 10px rgba(239,68,68,0)} }
     @keyframes bubble-pulse-real { 0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)} 50%{box-shadow:0 0 0 10px rgba(34,197,94,0)} }
+    @keyframes bubble-pulse-neutral { 0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.4)} 50%{box-shadow:0 0 0 8px rgba(245,158,11,0)} }
     @keyframes slide-up { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
     @keyframes shake { 0%,100%{transform:translate(-50%,-50%) rotate(0deg)} 25%{transform:translate(-50%,-50%) rotate(-3deg)} 75%{transform:translate(-50%,-50%) rotate(3deg)} }
   </style>
@@ -159,18 +160,39 @@ const ZONES = {
 
 // News bubbles data pool
 const NEWS_POOL = [
-  {title:"Uống nước chanh lúc 6h sáng chữa được ung thư!", source:"screenshot", isFake:true, urgency:3},
-  {title:"Tuần tới thành phố cho học sinh nghỉ học vì dịch bệnh.", source:"post", isFake:true, urgency:2},
-  {title:"NASA xác nhận: Trái Đất sẽ tối 3 ngày vào tháng 12!", source:"post", isFake:true, urgency:3},
-  {title:"Bộ Y tế ra thông báo về lịch tiêm vaccine mới.", source:"gov", isFake:false, urgency:1},
-  {title:"Chính phủ tăng lương tối thiểu 6% từ tháng 7.", source:"official", isFake:false, urgency:1},
-  {title:"5G gây ung thư — Hãy chia sẻ ngay cho người thân!!!", source:"screenshot", isFake:true, urgency:3},
-  {title:"Ăn tỏi mỗi ngày ngăn ngừa COVID hoàn toàn!", source:"post", isFake:true, urgency:2},
-  {title:"Bộ Giáo dục công bố lịch thi tốt nghiệp THPT 2026.", source:"gov", isFake:false, urgency:1},
-  {title:"Vaccine mới có chip theo dõi từ tỉ phú nước ngoài!", source:"screenshot", isFake:true, urgency:3},
-  {title:"Bão số 5 đổ bộ vào miền Trung theo dự báo khí tượng.", source:"official", isFake:false, urgency:2},
-  {title:"Uống cà phê mỗi sáng tăng tuổi thọ 10 năm — sự thật!", source:"post", isFake:true, urgency:2},
-  {title:"Thành phố Hà Nội thông báo nghỉ lễ 30/4 - 1/5 kéo dài.", source:"gov", isFake:false, urgency:1},
+  // ===== RÕ RÀNG LÀ GIẢ =====
+  {title:"Uống nước chanh lúc 6h sáng chữa được ung thư!", source:"screenshot", isFake:true},
+  {title:"NASA xác nhận: Trái Đất sẽ tối 3 ngày vào tháng 12!", source:"post", isFake:true},
+  {title:"5G gây ung thư — Hãy chia sẻ ngay cho người thân!!!", source:"screenshot", isFake:true},
+  {title:"Vaccine mới có chip theo dõi từ tỉ phú nước ngoài!", source:"screenshot", isFake:true},
+  {title:"Uống cà phê mỗi sáng tăng tuổi thọ 10 năm!", source:"post", isFake:true},
+  {title:"Ăn tỏi mỗi ngày ngăn ngừa COVID hoàn toàn!", source:"post", isFake:true},
+  // ===== GIẢ TRÔNG GIỐNG THẬT (nguồn nghe có vẻ uy tín) =====
+  {title:"Bộ Y tế khuyến cáo: Không nên tiêm vaccine cho trẻ dưới 12 tuổi.", source:"screenshot", isFake:true},
+  {title:"Chuyên gia WHO: Đeo khẩu trang làm giảm oxy não.", source:"post", isFake:true},
+  {title:"Cục An toàn thực phẩm thu hồi sữa Vinamilk lô mới nhất.", source:"screenshot", isFake:true},
+  {title:"Tuần tới TP.HCM cúp điện luân phiên 3 ngày theo thông báo EVN.", source:"post", isFake:true},
+  {title:"Nghiên cứu mới: Điện thoại phát tia phóng xạ khi sạc ban đêm.", source:"screenshot", isFake:true},
+  {title:"Bộ Giáo dục xác nhận: Học sinh được nghỉ hè sớm 2 tuần năm nay.", source:"post", isFake:true},
+  {title:"Chính phủ quyết định giảm 50% học phí đại học từ học kỳ tới.", source:"screenshot", isFake:true},
+  {title:"Bộ Công an cảnh báo: Tội phạm đang dùng mã QR để trộm tài khoản.", source:"post", isFake:true},
+  {title:"VinFast thu hồi 10.000 xe do lỗi phanh khẩn cấp theo quyết định mới.", source:"screenshot", isFake:true},
+  {title:"Bộ Y tế xác nhận xuất hiện biến thể COVID mới lây qua không khí.", source:"post", isFake:true},
+  {title:"Ngân hàng Nhà nước cảnh báo: Đồng VND có thể mất giá 30% quý tới.", source:"screenshot", isFake:true},
+  {title:"Thủ tướng ký lệnh phong tỏa một số tỉnh từ tuần sau.", source:"post", isFake:true},
+  {title:"Sở Y tế TP.HCM: Nước máy bị nhiễm vi khuẩn, không nên dùng 48h.", source:"screenshot", isFake:true},
+  {title:"WHO: Đường hóa học trong nước ngọt gây ung thư tụy sau 5 năm.", source:"post", isFake:true},
+  // ===== TIN THẬT =====
+  {title:"Bộ Y tế ra thông báo về lịch tiêm vaccine mới.", source:"gov", isFake:false},
+  {title:"Chính phủ tăng lương tối thiểu 6% từ tháng 7.", source:"official", isFake:false},
+  {title:"Bộ Giáo dục công bố lịch thi tốt nghiệp THPT 2026.", source:"gov", isFake:false},
+  {title:"Bão số 5 đổ bộ vào miền Trung theo dự báo khí tượng.", source:"official", isFake:false},
+  {title:"Thành phố Hà Nội thông báo nghỉ lễ 30/4 - 1/5 kéo dài.", source:"gov", isFake:false},
+  {title:"Bộ Giao thông công bố mở thêm 5 tuyến xe buýt nhanh BRT.", source:"official", isFake:false},
+  {title:"EVN thông báo điều chỉnh giá điện từ 1/6 theo khung mới.", source:"gov", isFake:false},
+  {title:"Bộ Tài chính: Miễn thuế VAT cho hàng hóa thiết yếu đến hết năm.", source:"official", isFake:false},
+  {title:"UBND TP.HCM tổ chức hội nghị về quy hoạch đô thị 2026–2030.", source:"gov", isFake:false},
+  {title:"Cục Hàng không: Mở lại đường bay quốc tế sang Nhật và Hàn Quốc.", source:"official", isFake:false},
 ];
 
 const SOURCE_LABELS = {
@@ -182,9 +204,9 @@ const SOURCE_LABELS = {
 
 // Difficulty configs
 const DIFFICULTY = {
-  easy:   { bubbleInterval:12, maxBubbles:2, chaosRate:0.15, fakeRatio:0.5, apStart:7, apRegenSec:20, chaosDecay:0.3, clarifyEffect:25, boostEffect:30 },
-  normal: { bubbleInterval:8,  maxBubbles:4, chaosRate:0.28, fakeRatio:0.6, apStart:5, apRegenSec:20, chaosDecay:0.2, clarifyEffect:18, boostEffect:22 },
-  hard:   { bubbleInterval:5,  maxBubbles:7, chaosRate:0.5,  fakeRatio:0.7, apStart:5, apRegenSec:25, chaosDecay:0.1, clarifyEffect:12, boostEffect:15 },
+  easy:   { bubbleInterval:15, maxBubbles:3, chaosRate:0.12, fakeRatio:0.5, apStart:8, apRegenSec:6,  chaosDecay:0.35, clarifyEffect:28, boostEffect:35 },
+  normal: { bubbleInterval:10, maxBubbles:5, chaosRate:0.18, fakeRatio:0.6, apStart:6, apRegenSec:8,  chaosDecay:0.22, clarifyEffect:20, boostEffect:25 },
+  hard:   { bubbleInterval:6,  maxBubbles:8, chaosRate:0.30, fakeRatio:0.7, apStart:5, apRegenSec:10, chaosDecay:0.12, clarifyEffect:14, boostEffect:17 },
 };
 
 const PRACTICE_QS = [
@@ -409,11 +431,11 @@ function DifficultyScreen({onStart,onBack,th,t}) {
   const [selected,setSelected]=useState("normal");
   const opts=[
     {id:"easy", emoji:"🟢", label:t.easy, desc:t.easyDesc,
-     stats:["🫧 Ít bong bóng tin tức","⏱ Xuất hiện mỗi 12 giây","⚡ Bắt đầu với 7 AP","🌡 Tốc độ hỗn loạn chậm"]},
+     stats:["🫧 Tối đa 3 bong bóng","⏱ Bong bóng mỗi 15 giây","⚡ Bắt đầu 8 AP, hồi mỗi 6s","🌡 Tốc độ hỗn loạn thấp"]},
     {id:"normal", emoji:"🟡", label:t.normal2, desc:t.normalDesc,
-     stats:["🫧 Số bong bóng vừa phải","⏱ Xuất hiện mỗi 8 giây","⚡ Bắt đầu với 5 AP","🌡 Tốc độ hỗn loạn vừa"]},
+     stats:["🫧 Tối đa 5 bong bóng","⏱ Bong bóng mỗi 10 giây","⚡ Bắt đầu 6 AP, hồi mỗi 8s","🌡 Tốc độ hỗn loạn vừa"]},
     {id:"hard", emoji:"🔴", label:t.hard, desc:t.hardDesc,
-     stats:["🫧 Rất nhiều bong bóng","⏱ Xuất hiện mỗi 5 giây","⚡ Bắt đầu với 5 AP","🌡 Hỗn loạn tăng rất nhanh"]},
+     stats:["🫧 Tối đa 8 bong bóng","⏱ Bong bóng mỗi 6 giây","⚡ Bắt đầu 5 AP, hồi mỗi 10s","🌡 Hỗn loạn tăng nhanh"]},
   ];
   return (
     <div style={{minHeight:"100vh",background:th.bg,fontFamily:"'Segoe UI',sans-serif",display:"flex",flexDirection:"column"}}>
@@ -773,14 +795,18 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
   const [log,setLog]=useState([]);
   const [over,setOver]=useState(false);
   const [won,setWon]=useState(false);
-  const [selectedBubble,setSelectedBubble]=useState(null); // {bubble, zoneId}
-  const [gameStarted,setGameStarted]=useState(false); // delay win/lose check
+  const [winReason,setWinReason]=useState(""); // why won/lost
+  const [selectedBubble,setSelectedBubble]=useState(null);
+  // --- Phase system ---
+  // phase: "early" (0-5min) | "extend" (5-15min, need chaos<=20) | "crisis" (2min storm)
+  const [phase,setPhase]=useState("early");
+  const [phaseTimeLeft,setPhaseTimeLeft]=useState(300); // seconds left in current phase
+  const [phaseLabel,setPhaseLabel]=useState(""); // shown in header
+  const phaseRef=useRef("early");
   const tick=useRef(0);
   const apT=useRef(0);
   const bubbleTick=useRef(0);
-  const boostReduceRef=useRef({});
   const doneRef=useRef(false);
-  const startDelay=useRef(0);
   const zonesRef=useRef(zones);
   zonesRef.current=zones;
 
@@ -797,33 +823,82 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
       if(doneRef.current) return;
       tick.current++;
       apT.current++;
-      startDelay.current++;
 
       // AP regen
       const regenTick=cfg.apRegenSec;
       setApRegenCountdown(regenTick-(apT.current%regenTick));
-      if(apT.current%regenTick===0){
-        setAP(a=>Math.min(a+1,maxAP));
-      }
+      if(apT.current%regenTick===0) setAP(a=>Math.min(a+1,maxAP));
 
       // Date tick
       if(tick.current%15===0) setDate(d=>{let{d:day,m:mo,y:yr}=d;day++;if(day>28){day=1;mo++;}if(mo>12){mo=1;yr++;}return{d:day,m:mo,y:yr};});
 
+      // Phase timer countdown
+      setPhaseTimeLeft(prev=>{
+        const next=prev-1;
+        if(next<=0 && !doneRef.current){
+          const curChaos=Object.values(zonesRef.current).reduce((s,z)=>s+z.chaos,0)/4;
+          const curPhase=phaseRef.current;
+
+          if(curPhase==="early"){
+            // 5 min up — evaluate chaos level
+            if(curChaos<=20){
+              // Chaos stayed manageable → WIN
+              doneRef.current=true;
+              setWinReason("early_win");
+              setOver(true); setWon(true);
+              return 0;
+            } else if(curChaos<=50){
+              // Moderate chaos → extend 10 min, must bring chaos to ≤20
+              phaseRef.current="extend";
+              setPhase("extend");
+              addLog("⏱ Giai đoạn 2 bắt đầu — 10 phút để ổn định MXH!");
+              return 600;
+            } else {
+              // High chaos → crisis 2 min, must survive (keep all zones <90%)
+              phaseRef.current="crisis";
+              setPhase("crisis");
+              addLog("🔥 KHỦNG HOẢNG! Cơn bão tin giả — 2 phút sống sót!");
+              return 120;
+            }
+          } else if(curPhase==="extend"){
+            // 10 min up — did they bring chaos ≤20?
+            if(curChaos<=20){
+              doneRef.current=true; setWinReason("extend_win");
+              setOver(true); setWon(true);
+            } else {
+              doneRef.current=true; setWinReason("extend_lose");
+              setOver(true); setWon(false);
+            }
+            return 0;
+          } else if(curPhase==="crisis"){
+            // Survived 2 min storm → WIN
+            doneRef.current=true; setWinReason("crisis_win");
+            setOver(true); setWon(true);
+            return 0;
+          }
+        }
+        return next>0?next:0;
+      });
+
       // Bubble spawn
       bubbleTick.current++;
-      if(bubbleTick.current>=cfg.bubbleInterval){
+      const curPhaseNow=phaseRef.current;
+      // Crisis phase: much higher spawn rate
+      const spawnInterval=curPhaseNow==="crisis"?Math.max(1,Math.floor(cfg.bubbleInterval/3)):cfg.bubbleInterval;
+      const maxBub=curPhaseNow==="crisis"?cfg.maxBubbles*2:cfg.maxBubbles;
+      if(bubbleTick.current>=spawnInterval){
         bubbleTick.current=0;
         setZones(prev=>{
           const nx={...prev};
-          // count active bubbles across all zones
           const totalBubbles=Object.values(nx).reduce((s,z)=>s+z.bubbles.length,0);
-          if(totalBubbles<cfg.maxBubbles){
+          if(totalBubbles<maxBub){
             const zoneIds=Object.keys(ZONES);
             const zoneId=zoneIds[Math.floor(Math.random()*zoneIds.length)];
             const z={...nx[zoneId],bubbles:[...nx[zoneId].bubbles]};
-            // boost reduces fake spawn rate
             const boostMod=z.boostActive>0?0.4:1;
-            const isFake=Math.random()<(cfg.fakeRatio*boostMod);
+            // Crisis: mostly fake news
+            const fakeR=curPhaseNow==="crisis"?0.9:cfg.fakeRatio;
+            const isFake=Math.random()<(fakeR*boostMod);
             const pool=NEWS_POOL.filter(n=>n.isFake===isFake);
             if(pool.length>0){
               const news=pool[Math.floor(Math.random()*pool.length)];
@@ -831,43 +906,44 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
               const by=15+Math.random()*70;
               z.bubbles.push({...news,uid:Date.now()+Math.random(),x:bx,y:by,age:0,investigated:false});
               nx[zoneId]=z;
-              if(isFake) addLog(`⚠️ Tin giả xuất hiện tại ${ZONES[zoneId].name}`);
+              if(isFake) addLog(`⚠️ Tin giả tại ${ZONES[zoneId].name}`);
             }
           }
           return nx;
         });
       }
 
-      // Chaos update — fake bubbles that linger increase chaos
+      // Chaos update
       setZones(prev=>{
         const nx={};
+        const isCrisis=phaseRef.current==="crisis";
         for(const id in prev){
           const z={...prev[id],bubbles:[...prev[id].bubbles]};
-          // age bubbles
           const agedBubbles=z.bubbles.map(b=>({...b,age:b.age+1}));
-          // old fake bubbles add chaos
-          const chaosAdd=agedBubbles.filter(b=>b.isFake&&b.age>8).length*cfg.chaosRate*0.5
-            + agedBubbles.filter(b=>b.isFake&&b.age>3).length*cfg.chaosRate*0.2;
+          // Only count bubbles that have lingered for a while as chaos sources
+          const fakeOld=agedBubbles.filter(b=>b.isFake&&b.age>12).length;
+          const fakeMed=agedBubbles.filter(b=>b.isFake&&b.age>5).length;
+          const crisisMult=isCrisis?4:1;
+          // Much smaller chaos increments per tick so game lasts 5+ min
+          const chaosAdd=(fakeOld*cfg.chaosRate*0.3 + fakeMed*cfg.chaosRate*0.1)*crisisMult;
           z.chaos=Math.min(100, z.chaos+chaosAdd);
-          z.control=Math.max(0, z.control-chaosAdd*0.15);
-          z.influence=Math.min(100, z.influence+chaosAdd*0.1);
-          z.pressure=Math.min(100, z.pressure+chaosAdd*0.08);
-          // decay chaos slowly over time (player reward for doing nothing sometimes)
-          const decayChaos=cfg.chaosDecay*0.05;
+          z.control=Math.max(0, z.control-chaosAdd*0.08);
+          z.influence=Math.min(100, z.influence+chaosAdd*0.06);
+          z.pressure=Math.min(100, z.pressure+chaosAdd*0.05);
+          // Natural decay
+          const decayChaos=cfg.chaosDecay*0.08*(isCrisis?0.1:1);
           z.chaos=Math.max(0, z.chaos-decayChaos);
-          // decrease boost timer
           if(z.boostActive>0) z.boostActive=z.boostActive-1;
           z.bubbles=agedBubbles;
           nx[id]=z;
         }
-
-        // Win/lose check — only after 3 seconds
-        if(startDelay.current>3 && !doneRef.current){
-          const allChaosLow=Object.values(nx).every(z=>z.chaos<=5)&&Object.values(nx).every(z=>z.bubbles.filter(b=>b.isFake).length===0);
-          const allChaosHigh=Object.values(nx).every(z=>z.chaos>=90);
-          if(allChaosHigh){doneRef.current=true;setOver(true);setWon(false);}
-          // Win only if player has actively cleared things (start delay passed significantly)
-          if(allChaosLow && startDelay.current>60){doneRef.current=true;setOver(true);setWon(true);}
+        // Crisis lose ONLY: ALL zones chaos ≥90
+        if(phaseRef.current==="crisis" && !doneRef.current){
+          const allHigh=Object.values(nx).every(z=>z.chaos>=90);
+          if(allHigh){
+            doneRef.current=true; setWinReason("crisis_lose");
+            setOver(true); setWon(false);
+          }
         }
         return nx;
       });
@@ -955,9 +1031,11 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
 
   const restart=()=>{
     setZones(freshZones());setAP(cfg.apStart);setLog([]);
-    setDate({d:1,m:1,y:2026});setOver(false);setWon(false);
+    setDate({d:1,m:1,y:2026});setOver(false);setWon(false);setWinReason("");
     setSelectedBubble(null);
-    doneRef.current=false;tick.current=0;apT.current=0;bubbleTick.current=0;startDelay.current=0;
+    setPhase("early"); phaseRef.current="early";
+    setPhaseTimeLeft(300);
+    doneRef.current=false;tick.current=0;apT.current=0;bubbleTick.current=0;
     setApRegenCountdown(cfg.apRegenSec);
   };
 
@@ -972,10 +1050,38 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
 
   const diffLabel={easy:"🟢 Dễ",normal:"🟡 Bình thường",hard:"🔴 Khó"}[difficulty];
 
+  const phaseInfo = {
+    early: {label:"Giai đoạn 1/3 — Ổn định MXH", color:"#a78bfa", goal:"Giữ hỗn loạn < 20% trong 5 phút để thắng ngay"},
+    extend:{label:"Giai đoạn 2/3 — Duy trì kiểm soát", color:"#f59e0b", goal:"Giảm hỗn loạn xuống ≤ 20% trước khi hết giờ"},
+    crisis:{label:"⚠️ KHỦNG HOẢNG — Cơn bão tin giả!", color:"#ef4444", goal:"Ngăn hỗn loạn vượt 90% trong 2 phút để thắng"},
+  }[phase];
+
+  const fmt=(s)=>{const m=Math.floor(s/60);const ss=s%60;return `${m}:${ss.toString().padStart(2,"0")}`;};
+
+  const winMessages={
+    early_win:"Xuất sắc! Bạn kiểm soát MXH hoàn toàn trong 5 phút đầu!",
+    extend_win:"Tuyệt vời! Bạn đã dần ổn định hệ thống thành công!",
+    extend_lose:"Hết giờ! Hỗn loạn vẫn còn quá cao, bạn thất bại.",
+    crisis_win:"Kiên cường! Bạn đã vượt qua cơn bão tin giả!",
+    crisis_lose:"Mất kiểm soát! Tin giả tràn ngập toàn bộ MXH.",
+  };
+
   return (
-    <div style={{height:"100vh",background:th.bg,fontFamily:"'Segoe UI',sans-serif",display:"flex",flexDirection:"column",overflow:"hidden"}}>
+    <div style={{background:th.bg,fontFamily:"'Segoe UI',sans-serif",display:"flex",flexDirection:"column",overflow:"hidden",height:"100vh"}}>
+      {/* Phase banner */}
+      <div style={{background:phaseInfo.color+"18",borderBottom:`1px solid ${phaseInfo.color}44`,padding:"5px 14px",display:"flex",alignItems:"center",gap:12,flexShrink:0}}>
+        <span style={{color:phaseInfo.color,fontWeight:800,fontSize:12}}>{phaseInfo.label}</span>
+        <span style={{color:th.text3,fontSize:11,flex:1}}>{phaseInfo.goal}</span>
+        {/* Countdown */}
+        <div style={{display:"flex",alignItems:"center",gap:6,background:phase==="crisis"?"#ef444422":th.surface,borderRadius:8,padding:"3px 10px",border:`1px solid ${phaseInfo.color}55`}}>
+          <span style={{fontSize:12}}>⏱</span>
+          <span style={{color:phaseInfo.color,fontWeight:900,fontSize:14,fontVariantNumeric:"tabular-nums"}}>{fmt(phaseTimeLeft)}</span>
+          <span style={{color:th.text3,fontSize:10}}>còn lại</span>
+        </div>
+      </div>
+
       {/* Header */}
-      <div style={{background:th.headerBg,borderBottom:`1px solid ${th.border}`,padding:"8px 14px",display:"flex",alignItems:"center",gap:12,flexShrink:0,flexWrap:"wrap"}}>
+      <div style={{background:th.headerBg,borderBottom:`1px solid ${th.border}`,padding:"7px 14px",display:"flex",alignItems:"center",gap:12,flexShrink:0,flexWrap:"wrap"}}>
         <button onClick={onBack} style={{background:th.surface2,border:`1px solid ${th.border}`,borderRadius:8,color:th.text2,padding:"5px 10px",cursor:"pointer",fontWeight:600,fontSize:11}}>{t.back}</button>
         <div style={{color:th.accent,fontWeight:700,fontSize:12}}>📅 {date.d.toString().padStart(2,"0")}/{date.m.toString().padStart(2,"0")}/{date.y}</div>
         <div style={{display:"flex",alignItems:"center",gap:6}}>
@@ -988,9 +1094,9 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
         <div style={{display:"flex",alignItems:"center",gap:7,minWidth:180}}>
           <span style={{color:th.text3,fontSize:10,whiteSpace:"nowrap"}}>🌐 {t.chaosLevel}:</span>
           <div style={{flex:1,background:th.surface2,borderRadius:99,height:8,overflow:"hidden",minWidth:80}}>
-            <div style={{height:"100%",width:`${globalChaos}%`,background:globalChaos<=30?"#22c55e":globalChaos<=60?"#eab308":"#ef4444",borderRadius:99,transition:"width 0.5s"}}/>
+            <div style={{height:"100%",width:`${globalChaos}%`,background:globalChaos<=20?"#22c55e":globalChaos<=50?"#eab308":"#ef4444",borderRadius:99,transition:"width 0.5s"}}/>
           </div>
-          <span style={{color:globalChaos<=30?"#22c55e":globalChaos<=60?"#eab308":"#ef4444",fontSize:11,fontWeight:700}}>{Math.round(globalChaos)}%</span>
+          <span style={{color:globalChaos<=20?"#22c55e":globalChaos<=50?"#eab308":"#ef4444",fontSize:11,fontWeight:700}}>{Math.round(globalChaos)}%</span>
         </div>
         <span style={{fontSize:11,fontWeight:700,color:th.text3}}>{diffLabel}</span>
       </div>
@@ -1021,10 +1127,10 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
           </div>
 
           <div style={{borderTop:`1px solid ${th.border}`,paddingTop:10,marginTop:4}}>
-            <div style={{color:th.text3,fontSize:10,marginBottom:6}}>Bong bóng khu vực này:</div>
+            <div style={{color:th.text3,fontSize:10,marginBottom:6}}>Tin đang lan tại đây:</div>
             <div style={{color:th.text,fontWeight:700,fontSize:18,textAlign:"center"}}>{sz.bubbles.length}</div>
-            <div style={{color:sz.bubbles.filter(b=>b.isFake).length>0?"#ef4444":th.text3,fontSize:11,textAlign:"center"}}>
-              {sz.bubbles.filter(b=>b.isFake).length} tin giả · {sz.bubbles.filter(b=>!b.isFake).length} tin thật
+            <div style={{color:th.text3,fontSize:11,textAlign:"center"}}>
+              {sz.bubbles.filter(b=>b.investigated).length} đã kiểm tra · {sz.bubbles.filter(b=>!b.investigated).length} chưa rõ
             </div>
           </div>
         </div>
@@ -1070,10 +1176,13 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
           {Object.values(ZONES).map(zone=>{
             const z=zones[zone.id];
             return z.bubbles.map(bubble=>{
-              const isOld=bubble.age>8;
-              const isFake=bubble.isFake;
-              const color=isFake?"#ef4444":"#22c55e";
-              // position bubbles around the zone
+              const isOld=bubble.age>12;
+              // Only reveal color after investigated
+              const revealed=bubble.investigated;
+              const color=revealed?(bubble.isFake?"#ef4444":"#22c55e"):th.border2;
+              const textColor=revealed?(bubble.isFake?"#fca5a5":"#86efac"):th.text2;
+              const glowColor=revealed?(bubble.isFake?"#ef4444":"#22c55e"):"#6b7280";
+              const icon=revealed?(bubble.isFake?"📰":"📄"):"📋";
               const offsetX=zone.x+(bubble.x-50)*0.25;
               const offsetY=zone.y+(bubble.y-50)*0.25;
               return (
@@ -1094,29 +1203,32 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
                     borderRadius:99,
                     padding:"5px 10px",
                     fontSize:11,
-                    fontWeight:700,
-                    color,
+                    fontWeight:600,
+                    color:textColor,
                     whiteSpace:"nowrap",
-                    maxWidth:130,
+                    maxWidth:140,
                     overflow:"hidden",
                     textOverflow:"ellipsis",
-                    boxShadow:`0 0 ${isOld?16:8}px ${color}${isOld?"99":"55"}`,
-                    animation:isFake?(isOld?"bubble-pulse 1.2s ease-in-out infinite":"none"):"bubble-pulse-real 2s ease-in-out infinite",
+                    boxShadow:`0 0 ${isOld?14:6}px ${glowColor}${isOld?"88":"44"}`,
+                    // Only pulse if revealed+fake+old, otherwise gentle neutral pulse
+                    animation:revealed&&bubble.isFake&&isOld?"bubble-pulse 1.2s ease-in-out infinite":(!revealed&&isOld?"bubble-pulse-neutral 2s ease-in-out infinite":"none"),
                     position:"relative",
+                    opacity:revealed?1:0.85,
                   }}>
-                    {isFake?"📰":"📄"} {bubble.title.length>18?bubble.title.slice(0,18)+"…":bubble.title}
-                    {bubble.investigated&&<span style={{marginLeft:4,fontSize:9}}>🔍</span>}
-                    {isOld&&isFake&&<div style={{position:"absolute",top:-3,right:-3,background:"#ef4444",borderRadius:"50%",width:8,height:8}}/>}
+                    {icon} {bubble.title.length>20?bubble.title.slice(0,20)+"…":bubble.title}
+                    {/* Age indicator — urgent dot when old but not yet investigated */}
+                    {isOld&&!revealed&&<div style={{position:"absolute",top:-3,right:-3,background:"#f59e0b",borderRadius:"50%",width:8,height:8,boxShadow:"0 0 4px #f59e0b"}}/>}
+                    {isOld&&revealed&&bubble.isFake&&<div style={{position:"absolute",top:-3,right:-3,background:"#ef4444",borderRadius:"50%",width:8,height:8}}/>}
                   </div>
                 </div>
               );
             });
           })}
 
-          {/* Warning overlay if chaos very high */}
-          {globalChaos>75&&(
-            <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",background:"#ef444422",border:"1px solid #ef4444",borderRadius:10,padding:"6px 18px",color:"#fca5a5",fontWeight:700,fontSize:12,zIndex:100,animation:"bubble-pulse 1s infinite"}}>
-              ⚠️ {t.chaosWarning}
+          {/* Warning overlay if chaos very high or crisis phase */}
+          {(globalChaos>75||phase==="crisis")&&(
+            <div style={{position:"absolute",top:10,left:"50%",transform:"translateX(-50%)",background:phase==="crisis"?"#ef444433":"#ef444422",border:`1px solid #ef4444`,borderRadius:10,padding:"6px 18px",color:"#fca5a5",fontWeight:700,fontSize:12,zIndex:100,animation:"bubble-pulse 1s infinite",whiteSpace:"nowrap"}}>
+              {phase==="crisis"?"🔥 CƠN BÃO TIN GIẢ — Giữ hỗn loạn dưới 90%!":"⚠️ "+t.chaosWarning}
             </div>
           )}
         </div>
@@ -1139,8 +1251,9 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
                     <span style={{color:c,fontSize:11,fontWeight:700}}>{Math.round(z.chaos)}%</span>
                   </div>
                   <div style={{display:"flex",gap:4,marginTop:4,paddingLeft:14}}>
-                    {z.bubbles.filter(b=>b.isFake).length>0&&<span style={{background:"#ef444422",color:"#fca5a5",fontSize:9,borderRadius:4,padding:"1px 5px"}}>📰 {z.bubbles.filter(b=>b.isFake).length}</span>}
-                    {z.bubbles.filter(b=>!b.isFake).length>0&&<span style={{background:"#22c55e22",color:"#86efac",fontSize:9,borderRadius:4,padding:"1px 5px"}}>📄 {z.bubbles.filter(b=>!b.isFake).length}</span>}
+                    {z.bubbles.filter(b=>!b.investigated).length>0&&<span style={{background:th.surface2,color:th.text3,fontSize:9,borderRadius:4,padding:"1px 5px"}}>📋 {z.bubbles.filter(b=>!b.investigated).length}</span>}
+                    {z.bubbles.filter(b=>b.investigated&&b.isFake).length>0&&<span style={{background:"#ef444422",color:"#fca5a5",fontSize:9,borderRadius:4,padding:"1px 5px"}}>📰 {z.bubbles.filter(b=>b.investigated&&b.isFake).length}</span>}
+                    {z.bubbles.filter(b=>b.investigated&&!b.isFake).length>0&&<span style={{background:"#22c55e22",color:"#86efac",fontSize:9,borderRadius:4,padding:"1px 5px"}}>📄 {z.bubbles.filter(b=>b.investigated&&!b.isFake).length}</span>}
                   </div>
                 </div>
               );
@@ -1149,9 +1262,10 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
           {/* Legend */}
           <div style={{borderTop:`1px solid ${th.border}`,paddingTop:8,marginTop:4}}>
             <div style={{color:th.text3,fontSize:9,marginBottom:4,fontWeight:700,letterSpacing:1}}>CHÚ THÍCH</div>
-            <div style={{color:"#fca5a5",fontSize:10,marginBottom:3}}>📰 Tin giả — click để xử lý</div>
-            <div style={{color:"#86efac",fontSize:10,marginBottom:3}}>📄 Tin thật — click để kiểm tra</div>
-            <div style={{color:th.text3,fontSize:10}}>🔍 = đã kiểm tra nguồn</div>
+            <div style={{color:th.text3,fontSize:10,marginBottom:3}}>📋 Tin chưa rõ — click để kiểm tra</div>
+            <div style={{color:"#fca5a5",fontSize:10,marginBottom:3}}>📰 Tin giả (sau khi kiểm tra)</div>
+            <div style={{color:"#86efac",fontSize:10,marginBottom:3}}>📄 Tin thật (sau khi kiểm tra)</div>
+            <div style={{color:"#f59e0b",fontSize:10}}>🟡 Điểm vàng = tin lâu chưa xử lý</div>
           </div>
         </div>
       </div>
@@ -1181,11 +1295,20 @@ function GameScreen({onBack,settings,difficulty,onXP,th,t}) {
 
       {/* Game over overlay */}
       {over&&(
-        <div style={{position:"fixed",inset:0,background:"#000b",display:"flex",alignItems:"center",justifyContent:"center",zIndex:300}}>
-          <div style={{background:th.surface,border:`2px solid ${won?"#22c55e":"#ef4444"}`,borderRadius:24,padding:44,textAlign:"center",maxWidth:360}}>
+        <div style={{position:"fixed",inset:0,background:"#000c",display:"flex",alignItems:"center",justifyContent:"center",zIndex:300}}>
+          <div style={{background:th.surface,border:`2px solid ${won?"#22c55e":"#ef4444"}`,borderRadius:24,padding:44,textAlign:"center",maxWidth:400,width:"90%"}}>
             <div style={{fontSize:60,marginBottom:14}}>{won?"🏆":"💀"}</div>
             <div style={{color:won?"#86efac":"#fca5a5",fontSize:26,fontWeight:900,marginBottom:8}}>{won?t.win:t.lose}</div>
-            <div style={{color:th.text3,marginBottom:24,fontSize:13,lineHeight:1.6}}>{won?t.winMsg:t.loseMsg}</div>
+            {/* Phase badge */}
+            <div style={{display:"inline-block",background:phaseInfo.color+"22",border:`1px solid ${phaseInfo.color}55`,borderRadius:8,padding:"3px 12px",color:phaseInfo.color,fontSize:11,fontWeight:700,marginBottom:12}}>
+              {phaseInfo.label}
+            </div>
+            <div style={{color:th.text2,marginBottom:8,fontSize:14,lineHeight:1.6,fontWeight:600}}>
+              {winMessages[winReason]||""}
+            </div>
+            <div style={{color:th.text3,marginBottom:24,fontSize:12}}>
+              Hỗn loạn cuối: <span style={{color:globalChaos<=20?"#86efac":globalChaos<=50?"#fcd34d":"#fca5a5",fontWeight:700}}>{Math.round(globalChaos)}%</span>
+            </div>
             <div style={{display:"flex",gap:10,justifyContent:"center"}}>
               <button onClick={restart} style={{background:th.accent,border:"none",borderRadius:12,color:"#fff",padding:"11px 24px",fontWeight:700,fontSize:14,cursor:"pointer"}}>{t.playAgain}</button>
               <button onClick={onBack} style={{background:th.surface2,border:`1px solid ${th.border}`,borderRadius:12,color:th.text2,padding:"11px 24px",fontWeight:700,fontSize:14,cursor:"pointer"}}>{t.menu}</button>
